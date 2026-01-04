@@ -1,5 +1,9 @@
 numpy
 pandas
 setuptools
-
+pymysql
+python-dotenv
+scikit-learn
+psycopg2-binary
+sqlalchemy
 -e .

@@ -4,22 +4,27 @@ from src.MLPROJECT.logger import logging
 from src.MLPROJECT.exception import CustomException
 import pandas as pd
 from dotenv import load_dotenv
-from sqlalchemy import create_engine
+import pymysql
 
 load_dotenv()
 
 host = os.getenv("host")
-user = os.getenv("username")
+user = os.getenv("user")
 password = os.getenv("password")
 database = os.getenv("database")
-port = os.getenv("port")
 
 def read_sql_data():
     logging.info("Establishing database connection.")
     try:
-        engine = create_engine(f'postgresql://{user}:{password}@{host}:{port}/{database}')
-        df = pd.read_sql_query("SELECT * FROM sales", engine)
-        logging.info("Database connection established and data read successfully.")
+        mydb = pymysql.connect(
+            host=host,
+            user=user,
+            password=password,
+            database=database
+        )
+        df = pd.read_sql_query("SELECT * FROM sales", mydb)
+        logging.info("Database connection established.")
+        print(df.head())
         return df
     except Exception as e:
         raise CustomException(e, sys)
